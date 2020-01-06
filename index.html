@@ -184,13 +184,15 @@
                             var eachTemp = showForecast.list[arrayNum[y]].main.temp;
                              eachTemp = Math.floor((eachTemp - 273.15) * 9 / 5 + 32);
                             var eachHum = showForecast.list[arrayNum[y]].main.humidity;
-                            
+                            console.log(eachIconCode);
                             
                             //icon
-                            var iconurl = "http://openweathermap.org/img/wn/" + eachIconCode + "@2x.png";
-                            var iconBox = $("<img id='wicon' src='' alt='Weather icon'>");
-                            $("#wicon").attr('src', iconurl);
-                            
+                            var iconurl = "https://openweathermap.org/img/wn/" + eachIconCode + "@2x.png";
+                            console.log(iconurl);
+
+                            var iconBox = $("<img class='wicon' src=" + iconurl + " >");
+                            //$(".wicon").attr('src', iconurl);
+                            console.log(eachIconCode);
 
 
                             var forcastBox = $("<div>");
