@@ -41,10 +41,11 @@
 
         .eachBox {
             float: left;
-            width: 140px;
+            width: 130px;
             height: 200px;
-            padding: 15px;
+            padding: 12px;
             border: solid 1px rgb(221, 221, 221);
+            margin-right: 7px;
 
         }
     </style>
@@ -65,7 +66,6 @@
                     <h3>Search for a City:</h3>
                     <input class="searchBar" placeholder="Type City Name">
                     <button class="submitSearch">Search</button>
-                    <button class="testBtn">test</button>
                     <div class="searchHistory"></div>
                 </div>
             </div>
@@ -75,7 +75,9 @@
                     <h2 class="cityName"></h2>
                     <div class="searchBody"></div>
                 </div>
+               
                 <div class="forecast">
+                    
 
                 </div>
 
@@ -94,7 +96,7 @@
 
         $(document).ready(function () {
             $(".submitSearch").on("click", function (event) {
-
+                event.preventDefault();
 
                 var userInput = $(".searchBar").val();
                 console.log(userInput);
@@ -110,6 +112,7 @@
                     method: "GET"
                 })
                     .then(function (response) {
+
                         var results = response.data;
                         console.log(response);
 
@@ -122,14 +125,14 @@
 
 
                         //stop appending same city name
-                        if (searchHistoryText.innerText = searchHistoryBox.innerText) {
-                            return;
-                        }
+                         if (searchHistoryText.innerText = searchHistoryBox.innerText) {
+                             return;
+                         }
 
                         if (searchHistoryText.innerText != searchHistoryBox.innerTex) {
-                            $(".searchHistory").prepend(searchHistoryBox);
-                            searchHistoryBox.append(searchHistoryText);
-                        }
+                             $(".searchHistory").prepend(searchHistoryBox);
+                             searchHistoryBox.append(searchHistoryText);
+                         }
 
                         //search Result
                         $(".searchBody").empty();
@@ -149,68 +152,63 @@
                         //UV Index
                         var latData = (response.coord.lat);
                         var lonData = (response.coord.lon);
-                        var uviQueryURL = "http://api.openweathermap.org/data/2.5/uvi?appid=9718f7602fc9772f26d918ce670a97c8&lat=" + latData + "&lon=" + lonData
+                        var uviQueryURL = "https://api.openweathermap.org/data/2.5/uvi?appid=9718f7602fc9772f26d918ce670a97c8&lat=" + latData + "&lon=" + lonData
 
                         $.ajax({
                             url: uviQueryURL,
                             method: "GET"
                         }).then(function (showUVI) {
-                            console.log(showUVI);
 
                             var currentUVI = (showUVI.value);
                             $(".searchBody").append("UV Index: " + currentUVI + "<br>");
                         })
+
+
+                        //Forecast
+                        var forecastQueryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + userInput + ",us&appid=9718f7602fc9772f26d918ce670a97c8"
+
+                        $.ajax({
+                            url: forecastQueryURL,
+                            method: "GET"
+                        })
+                            .then(function (showForecast) {
+                                $(".forecast").empty();
+                                var h2Tag = $("<h2>");
+                                h2Tag.prepend("5-Day Forecast:" + "<br>");
+                                $(".forecast").append(h2Tag);
+
+                                var arrayNum = [0, 8, 16, 24, 32];
+
+                                for (var y = 0; y < arrayNum.length; y++) {
+
+                                    var eachDate = (showForecast.list[arrayNum[y]].dt_txt).substring(0, 10).replace(/-/g, "/");
+                                    var eachIconCode = showForecast.list[arrayNum[y]].weather[0].icon;
+                                    var eachTemp = showForecast.list[arrayNum[y]].main.temp;
+                                    eachTemp = Math.floor((eachTemp - 273.15) * 9 / 5 + 32);
+                                    var eachHum = showForecast.list[arrayNum[y]].main.humidity;
+
+                                    //icon
+                                    var iconurl = "https://openweathermap.org/img/wn/" + eachIconCode + "@2x.png";
+                                    var iconBox = $("<img class='wicon' src=" + iconurl + " >");
+
+                                    var forecastBox = $("<div>");
+                                    $(".forecast").append(forecastBox);
+                                    forecastBox.addClass("eachBox");
+                                    forecastBox.append(eachDate + "<br>");
+                                    forecastBox.append(iconBox);
+                                    forecastBox.append("Temp: " + eachTemp + " °F" + "<br>");
+                                    forecastBox.append("Humidity: " + eachHum + "%" + "<br>");
+
+
+                                }
+
+                            })
+
+
                     })
             })
 
-            //forcase 
-            $(".testBtn").on("click", function (event) {
-                event.preventDefault();
-                var userInput = $(".searchBar").val();
-                var forecastQueryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + userInput + ",us&appid=9718f7602fc9772f26d918ce670a97c8"
-                $.ajax({
-                    url: forecastQueryURL,
-                    method: "GET"
-                })
-                    .then(function (showForecast) {
-                        console.log(showForecast);
-                    
-                        var arrayNum = [0, 8, 16, 24, 32];
-                       
-                        for (var y = 0; y < arrayNum.length; y++) {
-
-                            var eachDate = (showForecast.list[arrayNum[y]].dt_txt).substring(0, 10).replace(/-/g, "/");
-                            var eachIconCode = showForecast.list[arrayNum[y]].weather[0].icon;
-                            var eachTemp = showForecast.list[arrayNum[y]].main.temp;
-                             eachTemp = Math.floor((eachTemp - 273.15) * 9 / 5 + 32);
-                            var eachHum = showForecast.list[arrayNum[y]].main.humidity;
-                            console.log(eachIconCode);
-                            
-                            //icon
-                            var iconurl = "https://openweathermap.org/img/wn/" + eachIconCode + "@2x.png";
-                            console.log(iconurl);
-
-                            var iconBox = $("<img class='wicon' src=" + iconurl + " >");
-                            //$(".wicon").attr('src', iconurl);
-                            console.log(eachIconCode);
-
-
-                            var forcastBox = $("<div>");
-                            $(".forecast").append(forcastBox);
-                            forcastBox.addClass("eachBox");
-                            forcastBox.append(eachDate + "<br>");
-                            forcastBox.append(iconBox);
-                            forcastBox.append("Temp: " + eachTemp + " °F" + "<br>");
-                            forcastBox.append("Humidity: " + eachHum + "%" + "<br>");
-
-                            
-
-                        }
-
-                    })
-
-            })
-
+          
         })
     </script>
 
