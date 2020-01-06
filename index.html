@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!--Bootstrap-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        .heroBanner {
+            text-align: center;
+            background-color: rgb(53, 52, 52);
+            color: white;
+            width: 100%;
+        }
+
+        h2 {
+            font-size: 1.5em;
+        }
+
+        h3 {
+            font-size: 1em;
+        }
+
+        .sideBar {
+            background-color: rgb(235, 235, 235);
+            height: 100vh;
+            margin: 10px 0px 10px 10px;
+            padding: 20px;
+
+        }
+
+        .searchResult {
+            margin: 10px 10px 10px 0px;
+            border: solid 1px rgb(221, 221, 221);
+            padding: 20px;
+        }
+
+        .eachBox {
+            float: left;
+            width: 140px;
+            height: 200px;
+            padding: 15px;
+            border: solid 1px rgb(221, 221, 221);
+
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="heroBanner">
+        <h1>Weather Dashboard</h1>
+    </div>
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="sideBar">
+                    <h3>Search for a City:</h3>
+                    <input class="searchBar" placeholder="Type City Name">
+                    <button class="submitSearch">Search</button>
+                    <button class="testBtn">test</button>
+                    <div class="searchHistory"></div>
+                </div>
+            </div>
+
+            <div class="col-sm-8">
+                <div class="searchResult">
+                    <h2 class="cityName"></h2>
+                    <div class="searchBody"></div>
+                </div>
+                <div class="forecast">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="moment.js"></script>
+    <script type="text/javascript">
+
+        var todayDate = moment().format('L');
+
+        $(document).ready(function () {
+            $(".submitSearch").on("click", function (event) {
+
+
+                var userInput = $(".searchBar").val();
+                console.log(userInput);
+                var apiKey = "9718f7602fc9772f26d918ce670a97c8";
+                var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + userInput + ",us&appid=9718f7602fc9772f26d918ce670a97c8"
+
+
+
+                // var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=9718f7602fc9772f26d918ce670a97c8"
+
+                $.ajax({
+                    url: queryURL,
+                    method: "GET"
+                })
+                    .then(function (response) {
+                        var results = response.data;
+                        console.log(response);
+
+                        // SideBar Search History 
+                        var searchHistoryText = $("<h3>");
+                        searchHistoryText.text(userInput);
+                        var searchHistoryBox = $("<div class='historyBox'>");
+                        $(".searchHistory").prepend(searchHistoryBox);
+                        searchHistoryBox.append(searchHistoryText);
+
+
+                        //stop appending same city name
+                        if (searchHistoryText.innerText = searchHistoryBox.innerText) {
+                            return;
+                        }
+
+                        if (searchHistoryText.innerText != searchHistoryBox.innerTex) {
+                            $(".searchHistory").prepend(searchHistoryBox);
+                            searchHistoryBox.append(searchHistoryText);
+                        }
+
+                        //search Result
+                        $(".searchBody").empty();
+                        $(".cityName").text(userInput + " (" + todayDate + ") ");
+                        //temp
+                        var currentTemp = (response.main.temp);
+                        var tempFahren = Math.floor((currentTemp - 273.15) * 9 / 5 + 32);
+
+                        $(".searchBody").append("Temperature: " + tempFahren + " °F" + "<br>");
+                        //humidity
+                        var currentHum = parseInt(response.main.humidity);
+                        $(".searchBody").append("Humidity: " + currentHum + "%" + "<br>");
+                        //wind Speed
+                        var currentWindSpeed = (response.wind.speed);
+                        $(".searchBody").append("Wind Speed: " + currentWindSpeed + " MPH" + "<br>");
+
+                        //UV Index
+                        var latData = (response.coord.lat);
+                        var lonData = (response.coord.lon);
+                        var uviQueryURL = "http://api.openweathermap.org/data/2.5/uvi?appid=9718f7602fc9772f26d918ce670a97c8&lat=" + latData + "&lon=" + lonData
+
+                        $.ajax({
+                            url: uviQueryURL,
+                            method: "GET"
+                        }).then(function (showUVI) {
+                            console.log(showUVI);
+
+                            var currentUVI = (showUVI.value);
+                            $(".searchBody").append("UV Index: " + currentUVI + "<br>");
+                        })
+                    })
+            })
+
+            //forcase 
+            $(".testBtn").on("click", function (event) {
+                event.preventDefault();
+                var userInput = $(".searchBar").val();
+                var forecastQueryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + userInput + ",us&appid=9718f7602fc9772f26d918ce670a97c8"
+                $.ajax({
+                    url: forecastQueryURL,
+                    method: "GET"
+                })
+                    .then(function (showForecast) {
+                        console.log(showForecast);
+                    
+                        var arrayNum = [0, 8, 16, 24, 32];
+                       
+                        for (var y = 0; y < arrayNum.length; y++) {
+
+                            var eachDate = (showForecast.list[arrayNum[y]].dt_txt).substring(0, 10).replace(/-/g, "/");
+                            var eachIconCode = showForecast.list[arrayNum[y]].weather[0].icon;
+                            var eachTemp = showForecast.list[arrayNum[y]].main.temp;
+                             eachTemp = Math.floor((eachTemp - 273.15) * 9 / 5 + 32);
+                            var eachHum = showForecast.list[arrayNum[y]].main.humidity;
+                            
+                            
+                            //icon
+                            var iconurl = "http://openweathermap.org/img/wn/" + eachIconCode + "@2x.png";
+                            var iconBox = $("<img id='wicon' src='' alt='Weather icon'>");
+                            $("#wicon").attr('src', iconurl);
+                            
+
+
+                            var forcastBox = $("<div>");
+                            $(".forecast").append(forcastBox);
+                            forcastBox.addClass("eachBox");
+                            forcastBox.append(eachDate + "<br>");
+                            forcastBox.append(iconBox);
+                            forcastBox.append("Temp: " + eachTemp + " °F" + "<br>");
+                            forcastBox.append("Humidity: " + eachHum + "%" + "<br>");
+
+                            
+
+                        }
+
+                    })
+
+            })
+
+        })
+    </script>
+
+</body>
+
+</html>
