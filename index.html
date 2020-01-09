@@ -26,7 +26,7 @@
         }
 
         .sideBar {
-            background-color: rgb(235, 235, 235);
+            background-color: rgb(238, 238, 238);
             height: 100vh;
             margin: 10px 0px 10px 10px;
             padding: 20px;
@@ -75,9 +75,9 @@
                     <h2 class="cityName"></h2>
                     <div class="searchBody"></div>
                 </div>
-               
+
                 <div class="forecast">
-                    
+
 
                 </div>
 
@@ -114,25 +114,40 @@
                     .then(function (response) {
 
                         var results = response.data;
+                        var searchHistoryArray = [];
                         console.log(response);
 
-                        // SideBar Search History 
-                        var searchHistoryText = $("<h3>");
-                        searchHistoryText.text(userInput);
-                        var searchHistoryBox = $("<div class='historyBox'>");
-                        $(".searchHistory").prepend(searchHistoryBox);
-                        searchHistoryBox.append(searchHistoryText);
+                        // // SideBar Search History 
+                        // var searchHistoryText = $("<h3>");
+                        // searchHistoryText.text(userInput);
+                        // var searchHistoryBox = $("<div class='historyBox'>");
+                        // $(".searchHistory").prepend(searchHistoryBox);
+                        // searchHistoryBox.append(searchHistoryText);
 
 
-                        //stop appending same city name
-                         if (searchHistoryText.innerText = searchHistoryBox.innerText) {
-                             return;
-                         }
+                        // //stop appending same city name
+                        //  if (searchHistoryText.innerText = searchHistoryBox.innerText) {
+                        //      return;
+                        //  }
 
-                        if (searchHistoryText.innerText != searchHistoryBox.innerTex) {
-                             $(".searchHistory").prepend(searchHistoryBox);
-                             searchHistoryBox.append(searchHistoryText);
-                         }
+                        // if (searchHistoryText.innerText != searchHistoryBox.innerTex) {
+                        //      $(".searchHistory").prepend(searchHistoryBox);
+                        //      searchHistoryBox.append(searchHistoryText);
+                        //  }
+
+                        if (searchHistoryArray.indexOf(userInput) < 0) {
+                            // SideBar Search History 
+                            var searchHistoryText = $("<h3>");
+                            searchHistoryText.text(userInput);
+                            var searchHistoryBox = $("<div class='historyBox'>");
+                            $(".searchHistory").prepend(searchHistoryBox);
+                            searchHistoryBox.append(searchHistoryText);
+                            console.log(searchHistoryArray);
+                            searchHistoryArray.push(userInput);
+                        }
+
+
+
 
                         //search Result
                         $(".searchBody").empty();
@@ -208,7 +223,7 @@
                     })
             })
 
-          
+
         })
     </script>
 
