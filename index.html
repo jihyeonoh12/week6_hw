@@ -93,6 +93,7 @@
     <script type="text/javascript">
 
         var todayDate = moment().format('L');
+        var searchHistoryArray = [];
 
         $(document).ready(function () {
             $(".submitSearch").on("click", function (event) {
@@ -102,7 +103,7 @@
                 console.log(userInput);
                 var apiKey = "9718f7602fc9772f26d918ce670a97c8";
                 var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + userInput + ",us&appid=9718f7602fc9772f26d918ce670a97c8"
-                var searchHistoryArray = [];
+                
 
 
                 // var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=9718f7602fc9772f26d918ce670a97c8"
