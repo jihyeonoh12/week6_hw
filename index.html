@@ -92,10 +92,25 @@
     <script src="moment.js"></script>
     <script type="text/javascript">
 
-        var todayDate = moment().format('L');
-        var searchHistoryArray = [];
-
         $(document).ready(function () {
+
+            var todayDate = moment().format('L');
+            var searchHistoryArray = [];
+            console.log(searchHistoryArray);
+            var localItems = localStorage.getItem("searchedItem");
+            searchHistoryArray.push(localItems);
+
+            if (searchHistoryArray.length > 0) {
+
+                for (var x = 0; x < searchHistoryArray.length; x++) {
+                    var searchHistoryText = $("<h3>");
+                    searchHistoryText.text(searchHistoryArray[x]);
+                    var searchHistoryBox = $("<div class='historyBox'>");
+                    $(".searchHistory").prepend(searchHistoryBox);
+                    searchHistoryBox.append(searchHistoryText);
+                }
+            }
+
             $(".submitSearch").on("click", function (event) {
                 event.preventDefault();
 
@@ -103,7 +118,6 @@
                 console.log(userInput);
                 var apiKey = "9718f7602fc9772f26d918ce670a97c8";
                 var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + userInput + ",us&appid=9718f7602fc9772f26d918ce670a97c8"
-                
 
 
                 // var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=9718f7602fc9772f26d918ce670a97c8"
@@ -115,26 +129,9 @@
                     .then(function (response) {
 
                         var results = response.data;
-                        
+
                         console.log(response);
 
-                        // // SideBar Search History 
-                        // var searchHistoryText = $("<h3>");
-                        // searchHistoryText.text(userInput);
-                        // var searchHistoryBox = $("<div class='historyBox'>");
-                        // $(".searchHistory").prepend(searchHistoryBox);
-                        // searchHistoryBox.append(searchHistoryText);
-
-
-                        // //stop appending same city name
-                        //  if (searchHistoryText.innerText = searchHistoryBox.innerText) {
-                        //      return;
-                        //  }
-
-                        // if (searchHistoryText.innerText != searchHistoryBox.innerTex) {
-                        //      $(".searchHistory").prepend(searchHistoryBox);
-                        //      searchHistoryBox.append(searchHistoryText);
-                        //  }
 
                         if (searchHistoryArray.indexOf(userInput) < 0) {
                             // SideBar Search History 
@@ -145,9 +142,8 @@
                             searchHistoryBox.append(searchHistoryText);
                             console.log(searchHistoryArray);
                             searchHistoryArray.push(userInput);
+                            localStorage.setItem("searchedItem", JSON.stringify(searchHistoryArray));
                         }
-
-
 
 
                         //search Result
