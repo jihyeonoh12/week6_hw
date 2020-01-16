@@ -96,13 +96,20 @@
 
             var todayDate = moment().format('L');
             var searchHistoryArray = [];
-            console.log(searchHistoryArray);
-            var localItems = localStorage.getItem("searchedItem");
-            searchHistoryArray.push(localItems);
 
-            if (searchHistoryArray.length > 0) {
+            var localItems = localStorage.getItem("searchedItem");
+            console.log(localItems);
+            console.log(searchHistoryArray);
+
+    
+
+            if (localItems !== null) {
+                searchHistoryArray = JSON.parse(localItems);
 
                 for (var x = 0; x < searchHistoryArray.length; x++) {
+                    
+                    console.log("haha");
+                    console.log(searchHistoryArray);
                     var searchHistoryText = $("<h3>");
                     searchHistoryText.text(searchHistoryArray[x]);
                     var searchHistoryBox = $("<div class='historyBox'>");
