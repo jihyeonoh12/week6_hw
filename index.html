@@ -6,72 +6,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+
+    <!--googlefont-->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700,800&display=swap" rel="stylesheet">
     <!--Bootstrap-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <style>
-        .heroBanner {
-            text-align: center;
-            background-color: rgb(53, 52, 52);
-            color: white;
-            width: 100%;
-        }
-
-        h2 {
-            font-size: 1.5em;
-        }
-
-        h3 {
-            font-size: 1em;
-        }
-
-        .sideBar {
-            background-color: rgb(238, 238, 238);
-            height: 100vh;
-            margin: 10px 0px 10px 10px;
-            padding: 20px;
-
-        }
-
-        .searchResult {
-            margin: 10px 10px 10px 0px;
-            border: solid 1px rgb(221, 221, 221);
-            padding: 20px;
-        }
-
-        .eachBox {
-            float: left;
-            width: 130px;
-            height: 200px;
-            padding: 12px;
-            border: solid 1px rgb(221, 221, 221);
-            margin-right: 7px;
-
-        }
-    </style>
-
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <div class="heroBanner">
-        <h1>Weather Dashboard</h1>
-    </div>
-
 
     <div class="container">
         <div class="row">
+        <h1 id="heading">U.S. Weather Dashboard</h1>
+        </div>
+
+        <div class="row content-body">
             <div class="col-sm-4">
-                <div class="sideBar">
+                <div class="sideBar box-shadow">
                     <h3>Search for a City:</h3>
-                    <input class="searchBar" placeholder="Type City Name">
-                    <button class="submitSearch">Search</button>
+                    <input  class="searchBar form-control" placeholder="Type City Name">
+                    <button type="button" class="submitSearch btn btn-primary">Search</button>
                     <div class="searchHistory"></div>
                 </div>
             </div>
 
             <div class="col-sm-8">
-                <div class="searchResult">
+                <div class="searchResult box-shadow">
                     <h2 class="cityName"></h2>
                     <div class="searchBody"></div>
                 </div>
@@ -96,27 +59,30 @@
 
             var todayDate = moment().format('L');
             var searchHistoryArray = [];
-
             var localItems = localStorage.getItem("searchedItem");
-            console.log(localItems);
-            console.log(searchHistoryArray);
-
-    
 
             if (localItems !== null) {
                 searchHistoryArray = JSON.parse(localItems);
 
                 for (var x = 0; x < searchHistoryArray.length; x++) {
-                    
-                    console.log("haha");
+
                     console.log(searchHistoryArray);
                     var searchHistoryText = $("<h3>");
                     searchHistoryText.text(searchHistoryArray[x]);
-                    var searchHistoryBox = $("<div class='historyBox'>");
+                    var searchHistoryBox = $("<button type='button' class='historyBox btn btn-outline-secondary'>");
                     $(".searchHistory").prepend(searchHistoryBox);
                     searchHistoryBox.append(searchHistoryText);
                 }
             }
+
+            //History button
+            $(".historyBox").on("click", function () {
+                var historyBtn = $(".historyBox").val();
+
+
+
+            });
+
 
             $(".submitSearch").on("click", function (event) {
                 event.preventDefault();
@@ -125,9 +91,6 @@
                 console.log(userInput);
                 var apiKey = "9718f7602fc9772f26d918ce670a97c8";
                 var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + userInput + ",us&appid=9718f7602fc9772f26d918ce670a97c8"
-
-
-                // var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=9718f7602fc9772f26d918ce670a97c8"
 
                 $.ajax({
                     url: queryURL,
@@ -144,7 +107,7 @@
                             // SideBar Search History 
                             var searchHistoryText = $("<h3>");
                             searchHistoryText.text(userInput);
-                            var searchHistoryBox = $("<div class='historyBox'>");
+                            var searchHistoryBox = $("<button class='historyBox'>");
                             $(".searchHistory").prepend(searchHistoryBox);
                             searchHistoryBox.append(searchHistoryText);
                             console.log(searchHistoryArray);
@@ -180,7 +143,10 @@
 
                             var currentUVI = (showUVI.value);
                             $(".searchBody").append("UV Index: " + currentUVI + "<br>");
-                        })
+                        });
+
+
+
 
 
                         //Forecast
@@ -192,7 +158,7 @@
                         })
                             .then(function (showForecast) {
                                 $(".forecast").empty();
-                                var h2Tag = $("<h2>");
+                                var h2Tag = $("<h3 class='forecase-title'>");
                                 h2Tag.prepend("5-Day Forecast:" + "<br>");
                                 $(".forecast").append(h2Tag);
 
@@ -210,7 +176,7 @@
                                     var iconurl = "https://openweathermap.org/img/wn/" + eachIconCode + "@2x.png";
                                     var iconBox = $("<img class='wicon' src=" + iconurl + " >");
 
-                                    var forecastBox = $("<div>");
+                                    var forecastBox = $("<div class='box-shadow'>");
                                     $(".forecast").append(forecastBox);
                                     forecastBox.addClass("eachBox");
                                     forecastBox.append(eachDate + "<br>");

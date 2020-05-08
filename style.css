@@ -1,0 +1,95 @@
+
+body {
+    background-color: rgb(241, 243, 247);
+    font-family: 'Poppins', sans-serif;
+}
+
+#heading {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 45px;
+    letter-spacing: 1px;
+    color: rgba(0, 0, 0, 0.8);
+
+    padding-top: 50px;
+}
+
+h1 {
+   margin: auto;
+   padding-bottom: 15px;
+}
+
+h2 {
+    font-size: 1.5em;
+    font-weight: 600;
+}
+
+h3 {
+    font-size: 1em;
+    font-weight: 600;
+}
+
+.sideBar { 
+    /* height: 100vh; */
+    margin: 10px 0px 10px 10px;
+    padding: 20px;
+}
+
+.box-shadow {
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+    box-shadow: 5px 5px 10px 2px #ecf1f5;
+   
+}
+
+.searchResult {
+    margin: 10px 10px 10px 0px;
+    /* border: solid 1px rgb(221, 221, 221); */
+    padding: 30px 25px 40px 25px;
+    
+}
+
+.eachBox {
+    float: left;
+    width: 19%;
+    height: auto;
+    padding: 12px;
+    margin-right: 5px;
+    font-size: .8em;
+}
+
+.content-body {
+    /* background-color: white; */
+}
+
+.searchBar {
+    width: 100%;
+    margin-bottom: 5px;
+}
+.submitSearch {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.historyBox {
+    width: 100%;
+    margin-bottom: 5px;
+
+}
+
+.cityName {
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.searchBody {
+    line-height: 2em;
+}
+
+
+.forecase-title{
+margin-top: 25px;
+margin-bottom: 10px;
+}
