@@ -107,7 +107,7 @@
                             // SideBar Search History 
                             var searchHistoryText = $("<h3>");
                             searchHistoryText.text(userInput);
-                            var searchHistoryBox = $("<button class='historyBox'>");
+                            var searchHistoryBox = $("<button type='button' class='historyBox btn btn-outline-secondary'>");
                             $(".searchHistory").prepend(searchHistoryBox);
                             searchHistoryBox.append(searchHistoryText);
                             console.log(searchHistoryArray);
